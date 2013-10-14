@@ -1,134 +1,126 @@
 #include <stdio.h>
+#include <stdlib.h>
+#define INDEX 100
 void printArray(int array[], int lim);
 int is_corner(int array[], int lim);
 
 int main(){
-	int hex[10][3] = { 1, 0, 0, 
-		               0, 2, 0, 
-					   0, 0, 3, 
-					   -4, 0, 0, 
-					   0, -5, 0, 
-					   0, 0, -6, 
-					   -7, 1, 0,
-					   -7, 0, 8,
-					   8, 0, 0 };
-	int hexan[70][3] = {0,0,0,-1,0,0};
-	int i;
-	int magnitude = 0;
+	int hex[INDEX][3] = {0,0,0,0,-1,1};
+	int i, a, b;
+	int magnitude = 1;
 	int direction;
-	for ( i=0; i<10; i++){
-		int size = (sizeof(hex[i]) / sizeof(hex[i][0]));
-		/*printArray( hex[i] , size );
-		printf("This is corner status %d\n", is_corner(hex[i], size));*/
-	}
-	/*for ( i=0; i<10; i++){
-		int size = (sizeof(hex[i]) / sizeof(hex[i][0]));
-		printArray( hex[i] , size );
-	}*/
 
-	//begin generator
-	for (i=2; i<70; i++){
-		int corner = is_corner(hexan[i - 1], 3);
+	printf("Please type the first hex number (under 100): ");
+	scanf_s("%d", &a);
+	getchar();
+	printf("Please type the second hex number (under 100): ");
+	scanf_s("%d", &b);
+	getchar();
+
+	//if (a > b)
+	//	a = index
+
+	for (i=2; i<INDEX; i++){
+		int corner = is_corner(hex[i - 1], 3);
 		if (corner != 0){
 			direction = corner;
 			switch(corner){
-				case -1:hexan[i][1] = -1;
-						hexan[i][0] = -magnitude;
-						break;
-				case -2:hexan[i][2] = -1;
-						hexan[i][1] = -magnitude;
-						break;
-				case -3:hexan[i][0] = 1;
-						hexan[i][2] = -magnitude;
-						break;
-				case 1: hexan[i][1] = 1;
-						hexan[i][0] = magnitude;
-						break;
-				case 2: hexan[i][2] = 1;
-						hexan[i][1] = magnitude;
-						break;
-				case 3: magnitude++;
-						hexan[i][0] = -1;
-						hexan[i][2] = magnitude;
-						break;
+			case 1: hex[i][0] = -1;
+					hex[i][1] = -magnitude + 1;
+					hex[i][2] = magnitude;
+					break;
+			case 2: hex[i][0] = -magnitude;
+					hex[i][1] = 1;
+					hex[i][2] = magnitude - 1;
+					break;
+			case 3: hex[i][0] = -magnitude + 1;
+					hex[i][1] = magnitude;
+					hex[i][2] = -1;
+					break;
+			case 4: hex[i][0] = 1;
+					hex[i][1] = magnitude -1;
+					hex[i][2] = -magnitude;
+					break;
+			case 5: hex[i][0] = magnitude;
+					hex[i][1] = -1;
+					hex[i][2] = -magnitude +1;
+					break;
+			case 6: hex[i][0] = magnitude;
+					hex[i][1] = -magnitude -1;
+					hex[i][2] = 1;
+					magnitude++;
+					break;
 			}
 		}
 		else{
-			printf("Direction = %d with index %d and input array ",direction,i);
-			printArray(hexan[i],3);
 			switch(direction){
-			case 3: hexan[i][0] = hexan[i-1][0] - 1;
-					hexan[i][2] = hexan[i-1][2] - 1;
+			case 6: hex[i][0] = hex[i-1][0] - 1;
+					hex[i][1] = hex[i-1][1];
+					hex[i][2] = hex[i-1][2] + 1;
 					break;
-			case -1:hexan[i][0] = hexan[i-1][0] + 1;
-					hexan[i][1] = hexan[i-1][1] - 1;
+			case 1: hex[i][0] = hex[i-1][0] - 1;
+					hex[i][1] = hex[i-1][1] + 1;
+					hex[i][2] = hex[i-1][2];
 					break;
-			case -2:hexan[i][1] = hexan[i-1][1] + 1;
-					hexan[i][2] = hexan[i-1][2] - 1;
+			case 2: hex[i][0] = hex[i-1][0];
+					hex[i][1] = hex[i-1][1] + 1;
+					hex[i][2] = hex[i-1][2] - 1;
 					break;
-			case -3:hexan[i][0] = hexan[i-1][0] + 1;
-					hexan[i][2] = hexan[i-1][2] + 1;
+			case 3: hex[i][0] = hex[i-1][0] + 1;
+					hex[i][1] = hex[i-1][1];
+					hex[i][2] = hex[i-1][2] - 1;
 					break;
-			case 1: hexan[i][0] = hexan[i-1][0] - 1;
-					hexan[i][1] = hexan[i-1][1] + 1;
+			case 4: hex[i][0] = hex[i-1][0] + 1;
+					hex[i][1] = hex[i-1][1] - 1;
+					hex[i][2] = hex[i-1][2];
 					break;
-			case 2: hexan[i][2] = hexan[i-1][2] + 1;
-					hexan[i][1] = hexan[i-1][1] - 1;
+			case 5: hex[i][0] = hex[i-1][0];
+					hex[i][1] = hex[i-1][1] - 1;
+					hex[i][2] = hex[i-1][2] + 1;
 					break;
 			}
 		}
 	}
-	for (i=0; i<70; i++){
+	for (i=0; i<INDEX; i++){
 		printf("%2d: ",i+1);
-		printArray(hexan[i],3);
+		printArray(hex[i],3);
 	}
+
+	printf("%d %d %d\n", hex[a-1][0], hex[a-1][1], hex[a-1][2] );
+	printf("%d %d %d\n", hex[b-1][0], hex[b-1][1], hex[b-1][2] );
+	printf("%d", ( abs(hex[a-1][0] - hex[b-1][0]) + abs(hex[a-1][1] - hex[b-1][1]) + abs(hex[a-1][2] - hex[b-1][2]))/2);
+	
 	getchar();
 	return 0;
 }
 
 void printArray( int a[], int lim ){
 	int i;
-	for (i=0; i < lim; i++) {
+	for (i=0; i < lim; i++){
 		printf("%2d ",a[i]);
-		if ( lim == (i + 1) )
+		if (lim == (i + 1))
 			printf("\n");
 	}
 }
 
 int is_corner( int a[], int lim){
-	int i;
-	int corner = 0; //get rid of the = 0 in production
-	int zeroes = 0;
-	for (i=0; i < lim; i++) {
-		if (a[i] == 0)
-			zeroes++;
-		else{
-			if (a[i] > 0)
-				corner = i + 1;
-			else
-				corner = -i - 1;
-		}
-	}
-	if (zeroes == 1)
-		corner = 0;
+	int corner = 0;
+	if ((a[0] == 0) && (a[1] < 0) && (a[2] > 0))
+		corner = 1;
+	else if ((a[1] == 0) && (a[0] < 0) && (a[2] > 0))
+		corner = 2;
+	else if ((a[2] == 0) && (a[0] < 0) && (a[1] > 0))
+		corner = 3;
+	else if ((a[0] == 0) && (a[1] > 0) && (a[2] < 0))
+		corner = 4;
+	else if ((a[1] == 0) && (a[0] > 0) && (a[2] < 0))
+		corner = 5;
+	else if ((a[2] == 0) && (a[0] > 0) && (a[1] < 0))
+		corner = 6;
 	return corner;
 }
 
-
-/* [000]
-   [-100]
-   [0-10]
-   [00-1]
-   [110]
-   []
-next ring occurs on 00X
-next turn occurs on X00, 0x0,or 00x
-question is how to generate the next hex
-
-array returnsArrayOfNextCoordinates(array motherArray){
-	
-}*/
-
 /*
 http://www-ee.eng.hawaii.edu/~tep/EE160/Code/Textbook/Chap7/scores2.c
+http://www.tutorialspoint.com/cprogramming/c_return_arrays_from_function.htm
 */
