@@ -24,9 +24,7 @@ int main(){
 	// creating hex. Dimensions of max(userinput)*3, because there are 3 coordinates
 	hex = (int**) malloc(c*sizeof(int*));
 	for (i = 0; i < c; i++){
-		hex[i] = (int*) malloc(3*sizeof(int));
-		for (j = 0; j < 3; j++)
-			hex[i][j] = 0; // fills hex with 0's
+		hex[i] = (int*) calloc(3,sizeof(int));
 	}
 	hex[1][1] = -1;
 	hex[1][2] = 1; // Results in hex[] = {0,0,0},{0,-1,1} which are the initial conditions necessary to get goin!
